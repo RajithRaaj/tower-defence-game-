@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nitro Drift: Apex Reckoning - Enhanced</title>
+    <title>Nitro Drift: Apex Reckoning - Ultimate Edition</title>
     <!-- Tailwind CSS for basic UI styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
@@ -26,68 +26,27 @@
             border-radius: 12px;
             display: block;
             touch-action: none; /* Prevent default touch actions like scrolling/zooming */
-            max-width: 95vw; /* Max width relative to viewport */
-            max-height: 80vh; /* Max height relative to viewport */
+            width: 100vw; /* Make canvas fill viewport width */
+            height: calc(100vh - 80px); /* Adjust height to leave space for UI if needed, or 100vh */
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.3), 0 0 40px rgba(0, 200, 255, 0.2);
         }
-        .controls-container {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            max-width: 95vw;
-            padding: 10px 0;
-            gap: 10px;
-        }
-        .control-button {
-            background-color: #007bff; /* Blue */
-            color: white;
-            padding: 15px 25px;
-            border-radius: 50px; /* Pill shape */
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
-            user-select: none; /* Prevent text selection on touch */
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.4);
-            border: 2px solid #0056b3;
-            flex-grow: 1; /* Allow buttons to grow */
-            text-align: center;
-            max-width: 150px; /* Limit button width */
-        }
-        .control-button:active {
-            background-color: #0056b3; /* Darker blue on press */
-            transform: scale(0.98);
-            box-shadow: 0 2px 5px rgba(0, 123, 255, 0.6);
-        }
-        .control-button.nitro {
-            background-color: #ff4500; /* Orange-red for nitro */
-            border-color: #cc3700;
-            box-shadow: 0 4px 10px rgba(255, 69, 0, 0.4);
-        }
-        .control-button.nitro:active {
-            background-color: #cc3700;
-            box-shadow: 0 2px 5px rgba(255, 69, 0, 0.6);
-        }
-        .control-button.fire {
-            background-color: #28a745; /* Green for fire */
-            border-color: #1e7e34;
-            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.4);
-        }
-        .control-button.fire:active {
-            background-color: #1e7e34;
-            box-shadow: 0 2px 5px rgba(40, 167, 69, 0.6);
-        }
-
         .game-info {
-            width: 100%;
-            max-width: 95vw;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90vw;
+            max-width: 800px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
+            padding: 10px 20px;
             font-size: 1.2em;
             font-weight: bold;
             color: #00ffff; /* Cyan */
+            background-color: rgba(15, 15, 26, 0.8);
+            border-radius: 10px;
+            z-index: 500;
         }
         .health-bar-container {
             width: 150px;
@@ -107,14 +66,14 @@
             background-color: #dc3545; /* Red */
         }
 
-        /* Message Modal */
+        /* Main Menu / Game Over Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.9);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -133,18 +92,23 @@
             border-radius: 15px;
             text-align: center;
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
-            max-width: 80vw;
+            max-width: 90vw;
+            width: 500px;
             color: #e0e0e0;
             border: 2px solid #00ffff;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
         .modal-content h2 {
-            font-size: 2em;
-            margin-bottom: 15px;
+            font-size: 2.5em;
+            margin-bottom: 10px;
             color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
         .modal-content p {
             font-size: 1.2em;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
         .modal-content button {
             background-color: #007bff;
@@ -154,12 +118,60 @@
             font-size: 1.1em;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s ease, transform 0.1s ease;
             border: none;
             box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
         }
         .modal-content button:hover {
             background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        .modal-content button:active {
+            transform: scale(0.98);
+        }
+
+        .modal-section {
+            background-color: #0f0f1a;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #4a4a6a;
+            margin-top: 15px;
+        }
+        .modal-section h3 {
+            font-size: 1.5em;
+            color: #00ffff;
+            margin-bottom: 10px;
+        }
+        .modal-section input {
+            background-color: #2a2a4a;
+            border: 1px solid #00ffff;
+            border-radius: 5px;
+            padding: 8px;
+            color: #e0e0e0;
+            width: calc(100% - 20px);
+            margin-bottom: 10px;
+        }
+        .modal-section .upgrade-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+        .modal-section .upgrade-item span {
+            font-size: 1em;
+        }
+        .modal-section .upgrade-item button {
+            padding: 8px 15px;
+            font-size: 0.9em;
+            border-radius: 20px;
+            box-shadow: none;
+        }
+        .modal-section .upgrade-item button:disabled {
+            background-color: #666;
+            cursor: not-allowed;
         }
 
         /* Loading Screen */
@@ -195,29 +207,37 @@
 
         /* Responsive adjustments */
         @media (max-width: 600px) {
-            .control-button {
-                padding: 12px 20px;
-                font-size: 1em;
-            }
             .game-info {
                 font-size: 1em;
+                padding: 8px 15px;
             }
             .health-bar-container {
-                width: 120px;
-                height: 18px;
+                width: 100px;
+                height: 16px;
             }
             .modal-content {
                 padding: 20px;
+                gap: 10px;
             }
             .modal-content h2 {
-                font-size: 1.5em;
+                font-size: 2em;
             }
             .modal-content p {
                 font-size: 1em;
             }
             .modal-content button {
-                padding: 10px 25px;
+                padding: 10px 20px;
                 font-size: 1em;
+            }
+            .modal-section h3 {
+                font-size: 1.2em;
+            }
+            .modal-section input {
+                padding: 6px;
+            }
+            .modal-section .upgrade-item button {
+                padding: 6px 10px;
+                font-size: 0.8em;
             }
         }
     </style>
@@ -228,8 +248,9 @@
         Loading Nitro Drift...
     </div>
 
-    <div class="game-info">
+    <div class="game-info" id="gameInfo">
         <div>Score: <span id="scoreDisplay">0</span></div>
+        <div>Coins: <span id="coinsDisplay">0</span></div>
         <div class="health-bar-container">
             <div id="healthBar" class="health-bar"></div>
         </div>
@@ -237,17 +258,44 @@
 
     <canvas id="gameCanvas"></canvas>
 
-    <div class="controls-container">
-        <button id="fireButton" class="control-button fire">FIRE</button>
-        <button id="nitroButton" class="control-button nitro">NITRO</button>
-    </div>
-
-    <!-- Message Modal -->
-    <div id="messageModal" class="modal-overlay">
+    <!-- Main Menu / Game Over Modal -->
+    <div id="mainMenuModal" class="modal-overlay show">
         <div class="modal-content">
-            <h2 id="modalTitle"></h2>
-            <p id="modalMessage"></p>
-            <button id="modalCloseButton">OK</button>
+            <h2 id="modalTitle">Nitro Drift: Apex Reckoning</h2>
+            <p id="modalMessage">Get ready for high-octane vehicular combat!</p>
+            <button id="startGameButton">Start Game</button>
+
+            <div class="modal-section">
+                <h3>Upgrades</h3>
+                <div class="upgrade-item">
+                    <span>Max Health (+50) - Cost: <span id="healthUpgradeCost">100</span> Coins</span>
+                    <button id="upgradeHealthButton">Buy</button>
+                </div>
+                <div class="upgrade-item">
+                    <span>Player Speed (+1) - Cost: <span id="speedUpgradeCost">150</span> Coins</span>
+                    <button id="upgradeSpeedButton">Buy</button>
+                </div>
+                <div class="upgrade-item">
+                    <span>Fire Rate (x0.8) - Cost: <span id="fireRateUpgradeCost">200</span> Coins</span>
+                    <button id="upgradeFireRateButton">Buy</button>
+                </div>
+                <div class="upgrade-item">
+                    <span>Projectile Damage (+5) - Cost: <span id="damageUpgradeCost">250</span> Coins</span>
+                    <button id="upgradeDamageButton">Buy</button>
+                </div>
+                <div class="upgrade-item">
+                    <span>Nitro Cooldown (-1s) - Cost: <span id="nitroCooldownUpgradeCost">300</span> Coins</span>
+                    <button id="upgradeNitroCooldownButton">Buy</button>
+                </div>
+            </div>
+
+            <div class="modal-section">
+                <h3>Redeem Code</h3>
+                <input type="text" id="redeemCodeInput" placeholder="Enter code here">
+                <button id="redeemCodeButton">Redeem</button>
+            </div>
+
+            <button id="buyCoinsButton">Buy More Coins</button>
         </div>
     </div>
 
@@ -259,28 +307,39 @@
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
         // Game Constants
-        const CANVAS_WIDTH = 800; // Base width for game logic
-        const CANVAS_HEIGHT = 600; // Base height for game logic
-        const PLAYER_SIZE = 40;
-        const ENEMY_SIZE = 45;
-        const PROJECTILE_SIZE = 8;
-        const PLAYER_SPEED = 3;
-        const ENEMY_SPEED_BASE = 1.5;
-        const PROJECTILE_SPEED = 7;
-        const PLAYER_HEALTH_MAX = 100;
-        const ENEMY_HEALTH_MAX = 30;
-        const FIRE_RATE_PLAYER_BASE = 200; // ms between shots
-        const FIRE_RATE_ENEMY = 1000; // ms between enemy shots
-        const NITRO_DURATION = 2000; // ms
-        const NITRO_COOLDOWN = 5000; // ms
-        const NITRO_SPEED_MULTIPLIER = 2.5;
-        const ENEMY_SPAWN_INTERVAL_BASE = 3000; // ms
-        const MAX_ENEMIES = 5;
+        const CANVAS_WIDTH_LOGIC = 1200; // Internal logic width, will scale to viewport
+        const CANVAS_HEIGHT_LOGIC = 900; // Internal logic height, will scale to viewport
+        const PLAYER_SIZE = 60;
+        const ENEMY_SIZE_BASE = 50;
+        const PROJECTILE_SIZE = 10;
+        const PLAYER_SPEED_BASE = 4;
+        const ENEMY_SPEED_BASE = 2;
+        const PROJECTILE_SPEED = 10;
+        const PLAYER_HEALTH_MAX_BASE = 200; // Much higher base health
+        const ENEMY_HEALTH_BASE = 40;
+        const FIRE_RATE_PLAYER_BASE = 150; // ms between shots (faster default)
+        const FIRE_RATE_ENEMY = 1200; // ms between enemy shots (slower for easier play)
+        const NITRO_DURATION = 3000; // ms (longer duration)
+        const NITRO_COOLDOWN_BASE = 8000; // ms (longer base cooldown)
+        const NITRO_SPEED_MULTIPLIER = 2.8;
+        const ENEMY_SPAWN_INTERVAL_BASE = 2500; // ms (slightly faster base spawn)
+        const MAX_ENEMIES = 7; // More enemies on screen
         const SCORE_PER_KILL = 100;
-        const POWER_UP_SPAWN_INTERVAL = 10000; // ms
-        const RAPID_FIRE_DURATION = 5000; // ms
-        const CAMERA_SHAKE_DURATION = 150; // ms
-        const CAMERA_SHAKE_INTENSITY = 5; // pixels
+        const COINS_PER_KILL = 10; // Coins earned per kill
+        const POWER_UP_SPAWN_INTERVAL = 5000; // ms (more frequent power-ups)
+        const RAPID_FIRE_DURATION = 7000; // ms (longer rapid fire)
+        const HEALTH_PACK_HEAL_AMOUNT = 50; // More healing
+        const CAMERA_SHAKE_DURATION = 200; // ms
+        const CAMERA_SHAKE_INTENSITY = 8; // pixels
+
+        // Upgrade Costs and Effects
+        const UPGRADES = {
+            health: { cost: 100, effect: 50, currentLevel: 0, maxLevel: 3, description: "Max Health" },
+            speed: { cost: 150, effect: 1, currentLevel: 0, maxLevel: 3, description: "Player Speed" },
+            fireRate: { cost: 200, effect: 0.1, currentLevel: 0, maxLevel: 3, description: "Fire Rate" },
+            damage: { cost: 250, effect: 5, currentLevel: 0, maxLevel: 3, description: "Projectile Damage" },
+            nitroCooldown: { cost: 300, effect: 1000, currentLevel: 0, maxLevel: 3, description: "Nitro Cooldown" }
+        };
 
         // Game State Variables
         let canvas, ctx;
@@ -291,6 +350,7 @@
         let particles = [];
         let powerUps = [];
         let score = 0;
+        let coins = 0; // New coins variable
         let lastPlayerShotTime = 0;
         let lastEnemySpawnTime = 0;
         let lastPowerUpSpawnTime = 0;
@@ -305,17 +365,19 @@
         let currentEnemySpeed = ENEMY_SPEED_BASE;
         let currentEnemySpawnInterval = ENEMY_SPAWN_INTERVAL_BASE;
         let playerFireRate = FIRE_RATE_PLAYER_BASE;
+        let playerProjectileDamage = 10; // Base projectile damage
+        let playerMaxHealth = PLAYER_HEALTH_MAX_BASE;
+        let nitroCooldown = NITRO_COOLDOWN_BASE;
 
         // UI Elements (declared globally, assigned in initGame)
-        let scoreDisplay;
-        let healthBar;
-        let fireButton;
-        let nitroButton;
-        let messageModal;
-        let modalTitle;
-        let modalMessage;
-        let modalCloseButton;
+        let scoreDisplay, coinsDisplay, healthBar;
+        let mainMenuModal, modalTitle, modalMessage, startGameButton;
+        let redeemCodeInput, redeemCodeButton, buyCoinsButton;
         let loadingScreen;
+
+        // Upgrade buttons and cost displays
+        let healthUpgradeCostDisplay, speedUpgradeCostDisplay, fireRateUpgradeCostDisplay, damageUpgradeCostDisplay, nitroCooldownUpgradeCostDisplay;
+        let upgradeHealthButton, upgradeSpeedButton, upgradeFireRateButton, upgradeDamageButton, upgradeNitroCooldownButton;
 
         // Touch Input States
         let touchStartX = 0;
@@ -323,8 +385,8 @@
         let isMoving = false;
         let currentTouchX = 0;
         let currentTouchY = 0;
-        let fireButtonPressed = false;
-        let nitroButtonPressed = false;
+        let playerTouchId = -1; // To track specific touch for movement
+        let nitroTouchId = -1; // To track specific touch for nitro
 
         // Audio Context for sound effects
         let audioContext;
@@ -338,14 +400,14 @@
 
         // Player Object
         function Player() {
-            this.x = CANVAS_WIDTH / 2;
-            this.y = CANVAS_HEIGHT - PLAYER_SIZE * 2;
+            this.x = CANVAS_WIDTH_LOGIC / 2;
+            this.y = CANVAS_HEIGHT_LOGIC - PLAYER_SIZE * 2;
             this.width = PLAYER_SIZE;
             this.height = PLAYER_SIZE;
             this.color = '#00ffff'; // Cyan
-            this.health = PLAYER_HEALTH_MAX;
+            this.health = playerMaxHealth; // Use upgraded max health
             this.rotation = 0; // In radians
-            this.speed = PLAYER_SPEED;
+            this.speed = PLAYER_SPEED_BASE; // Base speed, will be modified by upgrades
             this.isDrifting = false; // Not implemented yet, but for future use
         }
 
@@ -400,21 +462,30 @@
 
         Player.prototype.heal = function(amount) {
             this.health += amount;
-            if (this.health > PLAYER_HEALTH_MAX) this.health = PLAYER_HEALTH_MAX;
+            if (this.health > playerMaxHealth) this.health = playerMaxHealth; // Heal up to upgraded max health
             updateHealthBar();
         };
 
         // Enemy Object
-        function Enemy(x, y) {
+        function Enemy(x, y, type = 'basic') {
             this.x = x;
             this.y = y;
-            this.width = ENEMY_SIZE;
-            this.height = ENEMY_SIZE;
-            this.color = '#dc3545'; // Red
-            this.health = ENEMY_HEALTH_MAX;
+            this.type = type;
+            this.width = ENEMY_SIZE_BASE;
+            this.height = ENEMY_SIZE_BASE;
+            this.color = '#dc3545'; // Red for basic
+            this.health = ENEMY_HEALTH_BASE;
             this.speed = currentEnemySpeed; // Use dynamically adjusted speed
             this.rotation = 0; // Will point towards player
             this.lastShotTime = Date.now();
+
+            if (this.type === 'heavy') {
+                this.width = ENEMY_SIZE_BASE * 1.2;
+                this.height = ENEMY_SIZE_BASE * 1.2;
+                this.color = '#8a2be2'; // Blue-violet for heavy
+                this.health = ENEMY_HEALTH_BASE * 1.5; // More health
+                this.speed = currentEnemySpeed * 0.8; // Slower
+            }
         }
 
         Enemy.prototype.draw = function() {
@@ -429,7 +500,7 @@
             ctx.fill();
 
             // Turret (simple square)
-            ctx.fillStyle = '#8b0000'; // Dark red
+            ctx.fillStyle = this.type === 'heavy' ? '#4b0082' : '#8b0000'; // Darker color for heavy
             ctx.beginPath();
             ctx.roundRect(-this.width / 6, -this.height / 2 - 5, this.width / 3, 10, 2);
             ctx.fill();
@@ -446,8 +517,8 @@
             this.y += Math.sin(angleToPlayer) * this.speed;
 
             // Keep enemy within canvas bounds
-            this.x = Math.max(this.width / 2, Math.min(CANVAS_WIDTH - this.width / 2, this.x));
-            this.y = Math.max(this.height / 2, Math.min(CANVAS_HEIGHT - this.height / 2, this.y));
+            this.x = Math.max(this.width / 2, Math.min(CANVAS_WIDTH_LOGIC - this.width / 2, this.x));
+            this.y = Math.max(this.height / 2, Math.min(CANVAS_HEIGHT_LOGIC - this.height / 2, this.y));
 
             // Shoot at player
             if (Date.now() - this.lastShotTime > FIRE_RATE_ENEMY) {
@@ -475,6 +546,7 @@
             this.angle = angle;
             this.color = color;
             this.isEnemy = isEnemy;
+            this.damage = isEnemy ? 10 : playerProjectileDamage; // Player damage is dynamic
         }
 
         Projectile.prototype.draw = function() {
@@ -521,9 +593,29 @@
             this.x = x;
             this.y = y;
             this.size = 30;
-            this.type = type; // 'health' or 'rapid_fire'
-            this.color = type === 'health' ? '#28a745' : '#007bff'; // Green for health, blue for rapid fire
-            this.speed = 1; // Scrolls down slowly
+            this.type = type; // 'health', 'rapid_fire', 'shield', 'triple_shot'
+            this.color = '#ffffff'; // Default white, will be overridden
+            this.symbol = ''; // Emoji symbol
+
+            switch (type) {
+                case 'health':
+                    this.color = '#28a745'; // Green
+                    this.symbol = '✚';
+                    break;
+                case 'rapid_fire':
+                    this.color = '#007bff'; // Blue
+                    this.symbol = '⚡';
+                    break;
+                case 'shield':
+                    this.color = '#ffc107'; // Yellow
+                    this.symbol = '🛡️';
+                    break;
+                case 'triple_shot':
+                    this.color = '#6f42c1'; // Purple
+                    this.symbol = '✖️3';
+                    break;
+            }
+            this.speed = 1.5; // Scrolls down slowly
         }
 
         PowerUp.prototype.draw = function() {
@@ -537,47 +629,61 @@
 
             // Draw symbol
             ctx.fillStyle = '#ffffff';
-            if (this.type === 'health') {
-                ctx.font = 'bold 20px Inter';
-                ctx.fillText('+', this.x - 7, this.y + 7);
-            } else { // rapid_fire
-                ctx.font = 'bold 20px Inter';
-                ctx.fillText('⚡', this.x - 10, this.y + 8); // Lightning bolt emoji
-            }
+            ctx.font = 'bold 20px Inter';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(this.symbol, this.x, this.y + 2); // Adjust Y for better centering
         };
 
         PowerUp.prototype.update = function() {
             this.y += this.speed;
         };
 
-        // Initialize Game
+        // Game Initialization
         function initGame() {
             canvas = document.getElementById('gameCanvas');
             ctx = canvas.getContext('2d');
 
             // Assign UI elements here to ensure they are loaded
             scoreDisplay = document.getElementById('scoreDisplay');
+            coinsDisplay = document.getElementById('coinsDisplay');
             healthBar = document.getElementById('healthBar');
-            fireButton = document.getElementById('fireButton');
-            nitroButton = document.getElementById('nitroButton');
-            messageModal = document.getElementById('messageModal');
+            mainMenuModal = document.getElementById('mainMenuModal');
             modalTitle = document.getElementById('modalTitle');
             modalMessage = document.getElementById('modalMessage');
-            modalCloseButton = document.getElementById('modalCloseButton');
+            startGameButton = document.getElementById('startGameButton');
+            redeemCodeInput = document.getElementById('redeemCodeInput');
+            redeemCodeButton = document.getElementById('redeemCodeButton');
+            buyCoinsButton = document.getElementById('buyCoinsButton');
             loadingScreen = document.getElementById('loadingScreen');
+
+            // Upgrade buttons and cost displays
+            healthUpgradeCostDisplay = document.getElementById('healthUpgradeCost');
+            speedUpgradeCostDisplay = document.getElementById('speedUpgradeCost');
+            fireRateUpgradeCostDisplay = document.getElementById('fireRateUpgradeCost');
+            damageUpgradeCostDisplay = document.getElementById('damageUpgradeCost');
+            nitroCooldownUpgradeCostDisplay = document.getElementById('nitroCooldownUpgradeCost');
+
+            upgradeHealthButton = document.getElementById('upgradeHealthButton');
+            upgradeSpeedButton = document.getElementById('upgradeSpeedButton');
+            upgradeFireRateButton = document.getElementById('upgradeFireRateButton');
+            upgradeDamageButton = document.getElementById('upgradeDamageButton');
+            upgradeNitroCooldownButton = document.getElementById('upgradeNitroCooldownButton');
 
             // Initialize AudioContext
             if (!audioContext) {
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
             }
 
-            // Set canvas dimensions dynamically based on CSS max-width/height
-            // We'll use a fixed internal resolution for game logic and scale the canvas via CSS
-            canvas.width = CANVAS_WIDTH;
-            canvas.height = CANVAS_HEIGHT;
+            // Set canvas dimensions dynamically based on CSS viewport size
+            // We'll use a fixed internal resolution for game logic and scale the drawing
+            canvas.width = CANVAS_WIDTH_LOGIC;
+            canvas.height = CANVAS_HEIGHT_LOGIC;
 
+            // Initial game state setup
             player = new Player();
             score = 0;
+            coins = 0;
             enemies = [];
             playerProjectiles = [];
             enemyProjectiles = [];
@@ -592,103 +698,164 @@
             lastPowerUpSpawnTime = Date.now();
             cameraShakeRemaining = 0;
             cameraShakeOffset = { x: 0, y: 0 };
+
+            // Reset difficulty and player stats to base (or upgraded if loaded from persistence)
             currentEnemySpeed = ENEMY_SPEED_BASE;
             currentEnemySpawnInterval = ENEMY_SPAWN_INTERVAL_BASE;
             playerFireRate = FIRE_RATE_PLAYER_BASE;
+            playerProjectileDamage = 10;
+            playerMaxHealth = PLAYER_HEALTH_MAX_BASE;
+            nitroCooldown = NITRO_COOLDOWN_BASE;
+
+            // Apply upgrades from UPGRADES object (if levels are stored/loaded)
+            applyUpgrades();
 
             // Initialize road lines
             roadLines.length = 0; // Clear existing lines
-            for (let i = 0; i < CANVAS_HEIGHT / ROAD_LINE_SPACING + 2; i++) {
+            for (let i = 0; i < CANVAS_HEIGHT_LOGIC / ROAD_LINE_SPACING + 2; i++) {
                 roadLines.push({
                     y: i * ROAD_LINE_SPACING - ROAD_LINE_HEIGHT,
-                    leftX: CANVAS_WIDTH / 2 - ROAD_EDGE_OFFSET,
-                    rightX: CANVAS_WIDTH / 2 + ROAD_EDGE_OFFSET
+                    leftX: CANVAS_WIDTH_LOGIC / 2 - ROAD_EDGE_OFFSET,
+                    rightX: CANVAS_WIDTH_LOGIC / 2 + ROAD_EDGE_OFFSET
                 });
             }
 
             updateScore();
+            updateCoins();
             updateHealthBar();
-            gameRunning = true;
+            updateUpgradeUI(); // Update UI for upgrade costs/levels
 
             // Hide loading screen
             loadingScreen.style.display = 'none';
 
-            // Attach Event Listeners for Touch Controls and Buttons (Moved here)
+            // Attach Event Listeners (ensure they are only attached once)
+            setupEventListeners();
+
+            // Show main menu initially
+            showMainMenu();
+        }
+
+        // Setup Event Listeners (called once in initGame)
+        function setupEventListeners() {
+            // Canvas touch for movement and nitro
             canvas.addEventListener('touchstart', (e) => {
-                e.preventDefault(); // Prevent scrolling/zooming
-                const touch = e.touches[0];
-                const rect = canvas.getBoundingClientRect();
-                // Scale touch coordinates to game canvas resolution
-                touchStartX = (touch.clientX - rect.left) / rect.width * CANVAS_WIDTH;
-                touchStartY = (touch.clientY - rect.top) / rect.height * CANVAS_HEIGHT;
-                currentTouchX = touchStartX;
-                currentTouchY = touchStartY;
-                isMoving = true;
+                e.preventDefault();
+                for (let i = 0; i < e.changedTouches.length; i++) {
+                    const touch = e.changedTouches[i];
+                    const rect = canvas.getBoundingClientRect();
+                    const touchX = (touch.clientX - rect.left) / rect.width * CANVAS_WIDTH_LOGIC;
+                    // Check if touch is on the left half for movement
+                    if (touchX < CANVAS_WIDTH_LOGIC / 2 && playerTouchId === -1) {
+                        playerTouchId = touch.identifier;
+                        currentTouchX = touchX;
+                        currentTouchY = (touch.clientY - rect.top) / rect.height * CANVAS_HEIGHT_LOGIC;
+                        isMoving = true;
+                    }
+                    // Check if touch is on the right half for nitro
+                    else if (touchX >= CANVAS_WIDTH_LOGIC / 2 && nitroTouchId === -1) {
+                        nitroTouchId = touch.identifier;
+                        activateNitro();
+                    }
+                }
             }, { passive: false });
 
             canvas.addEventListener('touchmove', (e) => {
                 e.preventDefault();
-                const touch = e.touches[0];
-                const rect = canvas.getBoundingClientRect();
-                currentTouchX = (touch.clientX - rect.left) / rect.width * CANVAS_WIDTH;
-                currentTouchY = (touch.clientY - rect.top) / rect.height * CANVAS_HEIGHT;
+                for (let i = 0; i < e.changedTouches.length; i++) {
+                    const touch = e.changedTouches[i];
+                    if (touch.identifier === playerTouchId) {
+                        const rect = canvas.getBoundingClientRect();
+                        currentTouchX = (touch.clientX - rect.left) / rect.width * CANVAS_WIDTH_LOGIC;
+                        currentTouchY = (touch.clientY - rect.top) / rect.height * CANVAS_HEIGHT_LOGIC;
+                    }
+                }
             }, { passive: false });
 
             canvas.addEventListener('touchend', (e) => {
+                for (let i = 0; i < e.changedTouches.length; i++) {
+                    const touch = e.changedTouches[i];
+                    if (touch.identifier === playerTouchId) {
+                        isMoving = false;
+                        playerTouchId = -1;
+                    }
+                    if (touch.identifier === nitroTouchId) {
+                        nitroTouchId = -1;
+                    }
+                }
+            });
+
+            // Mouse events for desktop testing (simulating touch)
+            canvas.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                const rect = canvas.getBoundingClientRect();
+                const mouseX = (e.clientX - rect.left) / rect.width * CANVAS_WIDTH_LOGIC;
+                if (mouseX < CANVAS_WIDTH_LOGIC / 2) { // Left half for movement
+                    currentTouchX = mouseX;
+                    currentTouchY = (e.clientY - rect.top) / rect.height * CANVAS_HEIGHT_LOGIC;
+                    isMoving = true;
+                } else { // Right half for nitro
+                    activateNitro();
+                }
+            });
+            canvas.addEventListener('mousemove', (e) => {
+                if (isMoving) {
+                    const rect = canvas.getBoundingClientRect();
+                    currentTouchX = (e.clientX - rect.left) / rect.width * CANVAS_WIDTH_LOGIC;
+                    currentTouchY = (e.clientY - rect.top) / rect.height * CANVAS_HEIGHT_LOGIC;
+                }
+            });
+            canvas.addEventListener('mouseup', () => {
+                isMoving = false;
+            });
+            canvas.addEventListener('mouseleave', () => { // Stop moving if mouse leaves canvas
                 isMoving = false;
             });
 
-            // Button Listeners
-            fireButton.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                fireButtonPressed = true;
-                fireButton.classList.add('bg-green-700'); // Visual feedback
-            }, { passive: false });
-            fireButton.addEventListener('touchend', (e) => {
-                fireButtonPressed = false;
-                fireButton.classList.remove('bg-green-700');
-            });
-            // Also add mouse events for testing on desktop
-            fireButton.addEventListener('mousedown', () => { fireButtonPressed = true; fireButton.classList.add('bg-green-700'); });
-            fireButton.addEventListener('mouseup', () => { fireButtonPressed = false; fireButton.classList.remove('bg-green-700'); });
-            fireButton.addEventListener('mouseleave', () => { fireButtonPressed = false; fireButton.classList.remove('bg-green-700'); });
 
+            // Menu Button Listeners
+            startGameButton.onclick = () => {
+                mainMenuModal.classList.remove('show');
+                startGame();
+            };
 
-            nitroButton.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                if (nitroCooldownTimer <= 0) {
-                    nitroActive = true;
-                    nitroButton.classList.add('bg-orange-700');
-                    playSound('nitro');
-                    triggerCameraShake(CAMERA_SHAKE_INTENSITY * 1.5, NITRO_DURATION);
-                    setTimeout(() => {
-                        nitroActive = false;
-                        nitroButton.classList.remove('bg-orange-700');
-                        nitroButton.classList.add('opacity-50', 'cursor-not-allowed');
-                        nitroButton.disabled = true;
-                        nitroCooldownTimer = NITRO_COOLDOWN;
-                    }, NITRO_DURATION);
-                }
-            }, { passive: false });
-            // Also add mouse events for testing on desktop
-            nitroButton.addEventListener('mousedown', () => {
-                if (nitroCooldownTimer <= 0) {
-                    nitroActive = true;
-                    nitroButton.classList.add('bg-orange-700');
-                    playSound('nitro');
-                    triggerCameraShake(CAMERA_SHAKE_INTENSITY * 1.5, NITRO_DURATION);
-                    setTimeout(() => {
-                        nitroActive = false;
-                        nitroButton.classList.remove('bg-orange-700');
-                        nitroButton.classList.add('opacity-50', 'cursor-not-allowed');
-                        nitroButton.disabled = true;
-                        nitroCooldownTimer = NITRO_COOLDOWN;
-                    }, NITRO_DURATION);
-                }
-            });
+            redeemCodeButton.onclick = redeemCode;
+            buyCoinsButton.onclick = () => {
+                window.open('https://tally.so/r/3x7Bl5', '_blank');
+            };
 
+            // Upgrade Button Listeners
+            upgradeHealthButton.onclick = () => buyUpgrade('health');
+            upgradeSpeedButton.onclick = () => buyUpgrade('speed');
+            upgradeFireRateButton.onclick = () => buyUpgrade('fireRate');
+            upgradeDamageButton.onclick = () => buyUpgrade('damage');
+            upgradeNitroCooldownButton.onclick = () => buyUpgrade('nitroCooldown');
+        }
 
-            // Start game loop
+        // Start Game Function
+        function startGame() {
+            gameRunning = true;
+            // Reset game state for a new game, but keep upgrades
+            player = new Player(); // Re-initialize player with current upgraded stats
+            player.health = playerMaxHealth; // Start with full upgraded health
+            score = 0;
+            enemies = [];
+            playerProjectiles = [];
+            enemyProjectiles = [];
+            particles = [];
+            powerUps = [];
+            nitroActive = false;
+            nitroCooldownTimer = 0;
+            rapidFireActive = false;
+            rapidFireTimer = 0;
+            lastPlayerShotTime = 0;
+            lastEnemySpawnTime = Date.now();
+            lastPowerUpSpawnTime = Date.now();
+            currentEnemySpeed = ENEMY_SPEED_BASE;
+            currentEnemySpawnInterval = ENEMY_SPAWN_INTERVAL_BASE;
+            updateScore();
+            updateCoins();
+            updateHealthBar();
+
             if (animationFrameId) {
                 cancelAnimationFrame(animationFrameId);
             }
@@ -744,12 +911,19 @@
             }
 
             // Keep player within canvas bounds
-            player.x = Math.max(player.width / 2, Math.min(CANVAS_WIDTH - player.width / 2, player.x));
-            player.y = Math.max(player.height / 2, Math.min(CANVAS_HEIGHT - player.height / 2, player.y));
+            player.x = Math.max(player.width / 2, Math.min(CANVAS_WIDTH_LOGIC - player.width / 2, player.x));
+            player.y = Math.max(player.height / 2, Math.min(CANVAS_HEIGHT_LOGIC - player.height / 2, player.y));
 
-            // Player shooting
-            if (fireButtonPressed && Date.now() - lastPlayerShotTime > playerFireRate) {
-                playerProjectiles.push(new Projectile(player.x, player.y - player.height / 2, -Math.PI / 2, '#00ffff', false)); // Shoot upwards
+            // Player continuous shooting
+            if (Date.now() - lastPlayerShotTime > playerFireRate) {
+                // Triple shot if active
+                if (rapidFireActive && playerFireRate === FIRE_RATE_PLAYER_BASE / 2) { // Only triple shot if rapid fire is the active buff
+                    playerProjectiles.push(new Projectile(player.x - 15, player.y - player.height / 2, -Math.PI / 2, '#00ffff', false));
+                    playerProjectiles.push(new Projectile(player.x, player.y - player.height / 2, -Math.PI / 2, '#00ffff', false));
+                    playerProjectiles.push(new Projectile(player.x + 15, player.y - player.height / 2, -Math.PI / 2, '#00ffff', false));
+                } else {
+                    playerProjectiles.push(new Projectile(player.x, player.y - player.height / 2, -Math.PI / 2, '#00ffff', false)); // Shoot upwards
+                }
                 playSound('shoot');
                 lastPlayerShotTime = Date.now();
             }
@@ -766,12 +940,12 @@
             // Update projectiles
             playerProjectiles = playerProjectiles.filter(p => {
                 p.update();
-                return p.y > 0 && p.y < CANVAS_HEIGHT && p.x > -p.size && p.x < CANVAS_WIDTH + p.size;
+                return p.y > -p.size && p.y < CANVAS_HEIGHT_LOGIC + p.size && p.x > -p.size && p.x < CANVAS_WIDTH_LOGIC + p.size;
             });
 
             enemyProjectiles = enemyProjectiles.filter(p => {
                 p.update();
-                return p.y > 0 && p.y < CANVAS_HEIGHT && p.x > -p.size && p.x < CANVAS_WIDTH + p.size;
+                return p.y > -p.size && p.y < CANVAS_HEIGHT_LOGIC + p.size && p.x > -p.size && p.x < CANVAS_WIDTH_LOGIC + p.size;
             });
 
             // Update enemies and difficulty scaling
@@ -788,7 +962,7 @@
             }
             powerUps = powerUps.filter(p => {
                 p.update();
-                return p.y < CANVAS_HEIGHT + p.size; // Remove once off screen
+                return p.y < CANVAS_HEIGHT_LOGIC + p.size; // Remove once off screen
             });
 
             // Update particles
@@ -799,7 +973,7 @@
             const roadScrollSpeed = (player.speed + currentEnemySpeed) * 0.5; // Simulate relative speed
             roadLines.forEach(line => {
                 line.y += roadScrollSpeed;
-                if (line.y > CANVAS_HEIGHT + ROAD_LINE_HEIGHT / 2) {
+                if (line.y > CANVAS_HEIGHT_LOGIC + ROAD_LINE_HEIGHT / 2) {
                     line.y = -ROAD_LINE_SPACING + ROAD_LINE_HEIGHT / 2;
                 }
             });
@@ -809,17 +983,19 @@
             playerProjectiles.forEach((p, pIdx) => {
                 enemies.forEach((e, eIdx) => {
                     if (checkCollision(p, e)) {
-                        e.takeDamage(10); // Damage amount
+                        e.takeDamage(p.damage); // Use projectile's damage
                         playerProjectiles.splice(pIdx, 1); // Remove projectile
                         if (e.health <= 0) {
                             enemies.splice(eIdx, 1); // Remove enemy
                             score += SCORE_PER_KILL;
+                            coins += COINS_PER_KILL; // Earn coins
                             updateScore();
+                            updateCoins();
                             createExplosion(e.x, e.y, e.color);
                             playSound('explosion');
-                            // Adjust difficulty
-                            currentEnemySpeed = ENEMY_SPEED_BASE + Math.floor(score / 500) * 0.2;
-                            currentEnemySpawnInterval = Math.max(1000, ENEMY_SPAWN_INTERVAL_BASE - Math.floor(score / 500) * 200);
+                            // Adjust difficulty (slower scaling for easier play)
+                            currentEnemySpeed = ENEMY_SPEED_BASE + Math.floor(score / 1000) * 0.1;
+                            currentEnemySpawnInterval = Math.max(1500, ENEMY_SPAWN_INTERVAL_BASE - Math.floor(score / 1000) * 100);
                         } else {
                             createImpactParticles(p.x, p.y, p.color);
                         }
@@ -830,7 +1006,7 @@
             // Enemy Projectile vs Player
             enemyProjectiles.forEach((p, pIdx) => {
                 if (checkCollision(p, player)) {
-                    player.takeDamage(15); // Damage amount
+                    player.takeDamage(p.damage * 0.5); // Enemy projectiles do less damage
                     enemyProjectiles.splice(pIdx, 1); // Remove projectile
                     createImpactParticles(p.x, p.y, p.color);
                     playSound('hit');
@@ -840,19 +1016,21 @@
             // Player vs Enemy (ramming)
             enemies.forEach((e, eIdx) => {
                 if (checkCollision(player, e)) {
-                    player.takeDamage(5); // Ramming damage to player
-                    e.takeDamage(20); // Ramming damage to enemy
+                    player.takeDamage(10); // Ramming damage to player (reduced)
+                    e.takeDamage(30); // Ramming damage to enemy (increased)
                     createImpactParticles(player.x, player.y, '#ffffff'); // White impact
                     playSound('hit');
                     if (e.health <= 0) {
                         enemies.splice(eIdx, 1);
                         score += SCORE_PER_KILL;
+                        coins += COINS_PER_KILL;
                         updateScore();
+                        updateCoins();
                         createExplosion(e.x, e.y, e.color);
                         playSound('explosion');
                         // Adjust difficulty
-                        currentEnemySpeed = ENEMY_SPEED_BASE + Math.floor(score / 500) * 0.2;
-                        currentEnemySpawnInterval = Math.max(1000, ENEMY_SPAWN_INTERVAL_BASE - Math.floor(score / 500) * 200);
+                        currentEnemySpeed = ENEMY_SPEED_BASE + Math.floor(score / 1000) * 0.1;
+                        currentEnemySpawnInterval = Math.max(1500, ENEMY_SPAWN_INTERVAL_BASE - Math.floor(score / 1000) * 100);
                     }
                 }
             });
@@ -861,24 +1039,34 @@
             powerUps.forEach((pu, puIdx) => {
                 if (checkCollision(player, pu)) {
                     if (pu.type === 'health') {
-                        player.heal(30); // Heal amount
+                        player.heal(HEALTH_PACK_HEAL_AMOUNT);
                     } else if (pu.type === 'rapid_fire') {
                         rapidFireActive = true;
                         rapidFireTimer = RAPID_FIRE_DURATION;
-                        playerFireRate = FIRE_RATE_PLAYER_BASE / 2; // Half fire rate
+                        playerFireRate = FIRE_RATE_PLAYER_BASE / 2; // Half fire rate for rapid fire
+                    } else if (pu.type === 'shield') {
+                        // Implement shield: temporary invincibility or damage reduction
+                        // For now, just heal a bit more
+                        player.heal(20);
+                        showMessage("Shield Acquired!", "Temporary defense boost!");
+                    } else if (pu.type === 'triple_shot') {
+                        // Triple shot is now integrated with rapid_fire for simplicity
+                        // If rapid_fire is active, it automatically becomes triple shot
+                        rapidFireActive = true;
+                        rapidFireTimer = RAPID_FIRE_DURATION;
+                        playerFireRate = FIRE_RATE_PLAYER_BASE / 2;
+                        showMessage("Triple Shot!", "Unleash a barrage of projectiles!");
                     }
                     powerUps.splice(puIdx, 1); // Remove power-up
                     playSound('powerup');
                 }
             });
 
-
             // Nitro cooldown
             if (nitroCooldownTimer > 0) {
                 nitroCooldownTimer -= (1000 / 60); // Decrement by frame time (approx 16.67ms)
                 if (nitroCooldownTimer <= 0) {
-                    nitroButton.classList.remove('opacity-50', 'cursor-not-allowed');
-                    nitroButton.disabled = false;
+                    // No button to enable, but reset state
                 }
             }
         }
@@ -889,11 +1077,11 @@
             ctx.save();
             ctx.translate(cameraShakeOffset.x, cameraShakeOffset.y);
 
-            ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); // Clear canvas
+            ctx.clearRect(0, 0, CANVAS_WIDTH_LOGIC, CANVAS_HEIGHT_LOGIC); // Clear canvas
 
             // Draw game background (optional, can be textured)
             ctx.fillStyle = '#0f0f1a';
-            ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+            ctx.fillRect(0, 0, CANVAS_WIDTH_LOGIC, CANVAS_HEIGHT_LOGIC);
 
             // Draw road lines
             ctx.fillStyle = '#4a4a6a'; // Grey for road lines
@@ -936,26 +1124,28 @@
 
         // Spawn a new enemy
         function spawnEnemy() {
-            const x = Math.random() * (CANVAS_WIDTH - ENEMY_SIZE) + ENEMY_SIZE / 2;
-            const y = Math.random() * (CANVAS_HEIGHT / 4); // Spawn in top quarter
-            enemies.push(new Enemy(x, y));
+            const x = Math.random() * (CANVAS_WIDTH_LOGIC - ENEMY_SIZE_BASE) + ENEMY_SIZE_BASE / 2;
+            const y = Math.random() * (CANVAS_HEIGHT_LOGIC / 4); // Spawn in top quarter
+            const enemyType = Math.random() < 0.3 ? 'heavy' : 'basic'; // 30% chance for heavy enemy
+            enemies.push(new Enemy(x, y, enemyType));
         }
 
         // Spawn a new power-up
         function spawnPowerUp() {
-            const x = Math.random() * (CANVAS_WIDTH - 60) + 30; // Random X, avoid edges
+            const x = Math.random() * (CANVAS_WIDTH_LOGIC - 60) + 30; // Random X, avoid edges
             const y = -30; // Spawn above canvas
-            const type = Math.random() < 0.6 ? 'health' : 'rapid_fire'; // 60% health, 40% rapid fire
+            const types = ['health', 'rapid_fire', 'shield', 'triple_shot'];
+            const type = types[Math.floor(Math.random() * types.length)];
             powerUps.push(new PowerUp(x, y, type));
         }
 
         // Create explosion particles
         function createExplosion(x, y, baseColor) {
-            for (let i = 0; i < 40; i++) {
+            for (let i = 0; i < 60; i++) { // More particles
                 const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 5 + 2; // More varied speed
-                const size = Math.random() * 6 + 4; // Larger, more varied size
-                const lifespan = Math.random() * 40 + 30; // Longer lifespan
+                const speed = Math.random() * 7 + 3; // More varied speed
+                const size = Math.random() * 8 + 5; // Larger, more varied size
+                const lifespan = Math.random() * 50 + 40; // Longer lifespan
                 const velocityX = Math.cos(angle) * speed;
                 const velocityY = Math.sin(angle) * speed;
                 particles.push(new Particle(x, y, baseColor, size, velocityX, velocityY, lifespan));
@@ -964,11 +1154,11 @@
 
         // Create impact particles
         function createImpactParticles(x, y, color) {
-            for (let i = 0; i < 15; i++) {
+            for (let i = 0; i < 20; i++) { // More particles
                 const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 3 + 1;
-                const size = Math.random() * 4 + 2;
-                const lifespan = Math.random() * 20 + 15;
+                const speed = Math.random() * 4 + 1.5;
+                const size = Math.random() * 5 + 3;
+                const lifespan = Math.random() * 25 + 20;
                 const velocityX = Math.cos(angle) * speed;
                 const velocityY = Math.sin(angle) * speed;
                 particles.push(new Particle(x, y, color, size, velocityX, velocityY, lifespan));
@@ -997,12 +1187,12 @@
                     oscillator.type = 'sine';
                     oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
                     gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.08); // Shorter, sharper
                     oscillator.start(audioContext.currentTime);
-                    oscillator.stop(audioContext.currentTime + 0.1);
+                    oscillator.stop(audioContext.currentTime + 0.08);
                     break;
                 case 'explosion':
-                    const bufferSize = audioContext.sampleRate * 0.5; // 0.5 seconds of noise
+                    const bufferSize = audioContext.sampleRate * 0.6; // Longer noise
                     const noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
                     const output = noiseBuffer.getChannelData(0);
                     for (let i = 0; i < bufferSize; i++) {
@@ -1015,10 +1205,10 @@
                     noiseSource.connect(gainNode);
                     gainNode.connect(audioContext.destination);
 
-                    gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5);
+                    gainNode.gain.setValueAtTime(0.7, audioContext.currentTime); // Louder
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.6);
                     noiseSource.start(audioContext.currentTime);
-                    noiseSource.stop(audioContext.currentTime + 0.5);
+                    noiseSource.stop(audioContext.currentTime + 0.6);
                     break;
                 case 'nitro':
                     oscillator = audioContext.createOscillator();
@@ -1027,10 +1217,10 @@
                     gainNode.connect(audioContext.destination);
 
                     oscillator.type = 'sawtooth';
-                    oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
-                    oscillator.frequency.linearRampToValueAtTime(800, audioContext.currentTime + 0.5);
-                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-                    gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + NITRO_DURATION / 1000);
+                    oscillator.frequency.setValueAtTime(250, audioContext.currentTime);
+                    oscillator.frequency.linearRampToValueAtTime(1000, audioContext.currentTime + 0.7); // Higher pitch change
+                    gainNode.gain.setValueAtTime(0.4, audioContext.currentTime);
+                    gainNode.gain.linearRampToValueAtTime(0.15, audioContext.currentTime + NITRO_DURATION / 1000);
                     oscillator.start(audioContext.currentTime);
                     oscillator.stop(audioContext.currentTime + NITRO_DURATION / 1000);
                     break;
@@ -1041,11 +1231,11 @@
                     gainNode.connect(audioContext.destination);
 
                     oscillator.type = 'square';
-                    oscillator.frequency.setValueAtTime(150, audioContext.currentTime);
-                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.05);
+                    oscillator.frequency.setValueAtTime(120, audioContext.currentTime); // Lower pitch
+                    gainNode.gain.setValueAtTime(0.35, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.07);
                     oscillator.start(audioContext.currentTime);
-                    oscillator.stop(audioContext.currentTime + 0.05);
+                    oscillator.stop(audioContext.currentTime + 0.07);
                     break;
                 case 'powerup':
                     oscillator = audioContext.createOscillator();
@@ -1054,12 +1244,12 @@
                     gainNode.connect(audioContext.destination);
 
                     oscillator.type = 'triangle';
-                    oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
-                    oscillator.frequency.linearRampToValueAtTime(880, audioContext.currentTime + 0.1);
-                    gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.2);
+                    oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+                    oscillator.frequency.linearRampToValueAtTime(1200, audioContext.currentTime + 0.15); // Higher, faster chime
+                    gainNode.gain.setValueAtTime(0.25, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.25);
                     oscillator.start(audioContext.currentTime);
-                    oscillator.stop(audioContext.currentTime + 0.2);
+                    oscillator.stop(audioContext.currentTime + 0.25);
                     break;
             }
         }
@@ -1069,8 +1259,13 @@
             scoreDisplay.textContent = score;
         }
 
+        function updateCoins() {
+            coinsDisplay.textContent = coins;
+            updateUpgradeUI(); // Update upgrade button states when coins change
+        }
+
         function updateHealthBar() {
-            const healthPercentage = (player.health / PLAYER_HEALTH_MAX) * 100;
+            const healthPercentage = (player.health / playerMaxHealth) * 100;
             healthBar.style.width = `${healthPercentage}%`;
             if (healthPercentage < 30) {
                 healthBar.classList.add('low');
@@ -1082,58 +1277,169 @@
         function showMessage(title, message, onConfirm) {
             modalTitle.textContent = title;
             modalMessage.textContent = message;
-            messageModal.classList.add('show');
+            // Hide other sections for a simple message
+            document.querySelectorAll('.modal-section').forEach(section => section.style.display = 'none');
+            startGameButton.style.display = 'none';
+            buyCoinsButton.style.display = 'none';
+
+            mainMenuModal.classList.add('show');
             modalCloseButton.onclick = () => {
-                messageModal.classList.remove('show');
+                mainMenuModal.classList.remove('show');
+                // Restore sections if needed for game over
+                document.querySelectorAll('.modal-section').forEach(section => section.style.display = 'block');
+                startGameButton.style.display = 'block';
+                buyCoinsButton.style.display = 'block';
                 if (onConfirm) {
                     onConfirm();
                 }
             };
         }
 
-        function gameOver() {
+        function showMainMenu() {
             gameRunning = false;
-            cancelAnimationFrame(animationFrameId);
-            showMessage('Game Over!', `Your score: ${score}`, () => {
-                initGame(); // Restart game
-            });
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            modalTitle.textContent = "Nitro Drift: Apex Reckoning";
+            modalMessage.textContent = "Get ready for high-octane vehicular combat!";
+            document.querySelectorAll('.modal-section').forEach(section => section.style.display = 'block');
+            startGameButton.style.display = 'block';
+            buyCoinsButton.style.display = 'block';
+            mainMenuModal.classList.add('show');
+            updateUpgradeUI(); // Ensure upgrade UI is fresh
         }
 
-        // Initialize Firebase (even if not fully used for game data persistence in this version)
-        // This ensures the mandatory global variables are handled.
-        // For a full Firebase integration (e.g., high scores), you'd use getFirestore, etc.
-        // import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        // import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        // import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        function gameOver() {
+            gameRunning = false;
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            modalTitle.textContent = "Game Over!";
+            modalMessage.textContent = `Your Score: ${score} | Coins Earned: ${coins}`;
+            document.querySelectorAll('.modal-section').forEach(section => section.style.display = 'block');
+            startGameButton.style.display = 'block';
+            buyCoinsButton.style.display = 'block';
+            mainMenuModal.classList.add('show');
+            updateUpgradeUI(); // Ensure upgrade UI is fresh
+        }
 
-        // let app, auth, db;
-        // async function initializeFirebase() {
-        //     if (Object.keys(firebaseConfig).length > 0) {
-        //         app = initializeApp(firebaseConfig);
-        //         auth = getAuth(app);
-        //         db = getFirestore(app);
-        //         try {
-        //             if (initialAuthToken) {
-        //                 await signInWithCustomToken(auth, initialAuthToken);
-        //             } else {
-        //                 await signInAnonymously(auth);
-        //             }
-        //             console.log("Firebase initialized and authenticated.");
-        //             // const userId = auth.currentUser?.uid || crypto.randomUUID();
-        //             // console.log("User ID:", userId);
-        //         } catch (error) {
-        //             console.error("Firebase authentication failed:", error);
-        //         }
-        //     } else {
-        //         console.warn("Firebase config not found. Running without Firebase features.");
-        //     }
-        // }
+        // Upgrade System Functions
+        function updateUpgradeUI() {
+            for (const key in UPGRADES) {
+                const upgrade = UPGRADES[key];
+                const costDisplay = document.getElementById(`${key}UpgradeCost`);
+                const buyButton = document.getElementById(`upgrade${key.charAt(0).toUpperCase() + key.slice(1)}Button`);
+
+                if (upgrade.currentLevel >= upgrade.maxLevel) {
+                    costDisplay.textContent = "MAX";
+                    buyButton.disabled = true;
+                    buyButton.textContent = "MAXED";
+                    buyButton.classList.add('opacity-50', 'cursor-not-allowed');
+                } else {
+                    const currentCost = upgrade.cost * (upgrade.currentLevel + 1); // Cost increases with level
+                    costDisplay.textContent = currentCost;
+                    buyButton.disabled = coins < currentCost;
+                    buyButton.textContent = "Buy";
+                    if (coins < currentCost) {
+                        buyButton.classList.add('opacity-50', 'cursor-not-allowed');
+                    } else {
+                        buyButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                    }
+                }
+            }
+        }
+
+        function buyUpgrade(upgradeType) {
+            const upgrade = UPGRADES[upgradeType];
+            const currentCost = upgrade.cost * (upgrade.currentLevel + 1);
+
+            if (coins >= currentCost && upgrade.currentLevel < upgrade.maxLevel) {
+                coins -= currentCost;
+                upgrade.currentLevel++;
+                applyUpgrades(); // Apply the new upgrade level
+                updateCoins();
+                updateUpgradeUI();
+                playSound('powerup'); // Use powerup sound for buying upgrade
+                showMessage("Upgrade Purchased!", `${upgrade.description} upgraded to level ${upgrade.currentLevel}!`);
+            } else if (upgrade.currentLevel >= upgrade.maxLevel) {
+                showMessage("Upgrade Maxed!", `${upgrade.description} is already at max level.`);
+            } else {
+                showMessage("Not Enough Coins!", `You need ${currentCost - coins} more coins for this upgrade.`);
+            }
+        }
+
+        function applyUpgrades() {
+            // Reset to base values before applying upgrades to avoid compounding errors
+            playerMaxHealth = PLAYER_HEALTH_MAX_BASE;
+            player.speed = PLAYER_SPEED_BASE;
+            playerFireRate = FIRE_RATE_PLAYER_BASE;
+            playerProjectileDamage = 10;
+            nitroCooldown = NITRO_COOLDOWN_BASE;
+
+            // Apply effects based on current upgrade levels
+            playerMaxHealth += UPGRADES.health.currentLevel * UPGRADES.health.effect;
+            player.speed += UPGRADES.speed.currentLevel * UPGRADES.speed.effect;
+            playerFireRate = FIRE_RATE_PLAYER_BASE * Math.pow((1 - UPGRADES.fireRate.effect), UPGRADES.fireRate.currentLevel);
+            playerProjectileDamage += UPGRADES.damage.currentLevel * UPGRADES.damage.effect;
+            nitroCooldown -= UPGRADES.nitroCooldown.currentLevel * UPGRADES.nitroCooldown.effect;
+            if (nitroCooldown < 1000) nitroCooldown = 1000; // Minimum cooldown
+
+            // Ensure player health scales with max health if already playing
+            if (player) {
+                player.health = Math.min(player.health, playerMaxHealth);
+                updateHealthBar();
+            }
+        }
+
+        // Redeem Code Function
+        function redeemCode() {
+            const code = redeemCodeInput.value.trim().toUpperCase();
+            let reward = 0;
+            let message = "";
+
+            switch (code) {
+                case 'RAAJ':
+                    reward = 500;
+                    message = "You redeemed RAAJ! +500 Coins!";
+                    break;
+                case 'RAJITH':
+                    reward = 2000;
+                    message = "You redeemed RAJITH! +2000 Coins!";
+                    break;
+                case 'TONY':
+                    reward = 1000000; // A million coins!
+                    message = "You redeemed TONY! A MILLION COINS! You're rich!";
+                    break;
+                default:
+                    message = "Invalid or expired code.";
+                    break;
+            }
+
+            if (reward > 0) {
+                coins += reward;
+                updateCoins();
+                redeemCodeInput.value = ''; // Clear input
+                playSound('powerup');
+            }
+            showMessage("Redeem Code", message);
+        }
+
+        // Nitro Activation (now triggered by right-half screen touch/hold)
+        function activateNitro() {
+            if (nitroCooldownTimer <= 0) {
+                nitroActive = true;
+                playSound('nitro');
+                triggerCameraShake(CAMERA_SHAKE_INTENSITY * 1.5, NITRO_DURATION);
+                setTimeout(() => {
+                    nitroActive = false;
+                    nitroCooldownTimer = nitroCooldown; // Use dynamic cooldown
+                }, NITRO_DURATION);
+            }
+        }
 
         // Start the game when the window loads
         window.onload = function() {
-            // initializeFirebase().then(() => {
-                initGame();
-            // });
+            initGame();
         };
     </script>
 </body>
